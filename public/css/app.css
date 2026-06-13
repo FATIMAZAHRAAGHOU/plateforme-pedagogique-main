@@ -1,0 +1,357 @@
+/* Global */
+body.app-layout-body,
+body.form-page-body {
+    background-color: #f4f6f9;
+}
+
+body.form-page-body {
+    background-color: #f4f7fb;
+}
+
+.text-main {
+    color: var(--main-color, #123c69) !important;
+}
+
+.border-main {
+    border-color: var(--border-color, #2f80ed) !important;
+}
+
+/* Navbar / Footer */
+.site-navbar,
+.site-footer {
+    background-color: #0b1f3a;
+}
+
+.site-brand-mark {
+    font-size: 24px;
+}
+
+/* Landing Page */
+.hero {
+    background: linear-gradient(135deg, #0b1f3a, #123c69);
+    color: white;
+    padding: 90px 0;
+}
+
+.hero h1 {
+    font-weight: 700;
+}
+
+.hero-box {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    padding: 30px;
+}
+
+.section-title {
+    font-weight: 700;
+    color: #0b1f3a;
+}
+
+.section-subtitle {
+    max-width: 700px;
+    margin: auto;
+    color: #6c757d;
+}
+
+.simple-card {
+    background: white;
+    border: none;
+    border-top: 4px solid #123c69;
+    border-radius: 14px;
+    padding: 30px;
+    height: 100%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: 0.2s;
+}
+
+.simple-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
+}
+
+.info-section {
+    background: white;
+    border-radius: 16px;
+    padding: 45px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.contact-box {
+    background: #f4f7fb;
+    border-left: 4px solid #123c69;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+
+/* Dashboards */
+.dashboard-shell {
+    background-color: var(--page-bg, #f4f7fb);
+    margin: 0;
+}
+
+.role-admin {
+    --page-bg: #f4f7fb;
+    --sidebar-bg: #123c69;
+    --sidebar-link: #dce8f5;
+    --active-color: #2f80ed;
+    --main-color: #123c69;
+    --border-color: #2f80ed;
+    --dashboard-table-bg: #123c69;
+    --dashboard-table-color: white;
+}
+
+.role-enseignant {
+    --page-bg: #eef7f1;
+    --sidebar-bg: #157347;
+    --sidebar-link: #e4f3ea;
+    --active-color: #198754;
+    --main-color: #157347;
+    --border-color: #198754;
+    --dashboard-table-bg: #f1f8f4;
+    --dashboard-table-color: #157347;
+}
+
+.role-etudiant {
+    --page-bg: #eef8fb;
+    --sidebar-bg: #0aa2c0;
+    --sidebar-link: #e8faff;
+    --active-color: #0dcaf0;
+    --main-color: #0aa2c0;
+    --border-color: #0dcaf0;
+    --dashboard-table-bg: #effbfe;
+    --dashboard-table-color: #0aa2c0;
+}
+
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background-color: var(--sidebar-bg, #123c69);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: 0.3s;
+}
+
+.sidebar.collapsed {
+    width: 80px;
+}
+
+.sidebar .brand {
+    padding: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    color: var(--sidebar-link, #dce8f5);
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.role-dynamic-index .sidebar a {
+    color: white;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: var(--active-color, #2f80ed);
+    color: white;
+}
+
+.sidebar.collapsed .text-menu {
+    display: none;
+}
+
+.content {
+    margin-left: 260px;
+    transition: 0.3s;
+}
+
+.content.expanded {
+    margin-left: 80px;
+}
+
+.topbar {
+    background: white;
+    height: 70px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.dashboard-hero {
+    border-color: var(--border-color, #2f80ed) !important;
+}
+
+.dashboard-card {
+    border: none;
+    border-left: 4px solid var(--border-color, #2f80ed);
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    transition: 0.2s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
+}
+
+.dashboard-card h5 {
+    color: var(--main-color, #123c69);
+}
+
+.dashboard-shell .table-card:not(.crud-table-card) .table thead th {
+    background-color: var(--dashboard-table-bg, #123c69);
+    color: var(--dashboard-table-color, white);
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px;
+    }
+
+    .sidebar .text-menu {
+        display: none;
+    }
+
+    .content {
+        margin-left: 80px;
+    }
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .user-name {
+        display: none;
+    }
+}
+
+/* CRUD Index Pages */
+.page-card {
+    background: white;
+    max-width: 850px;
+    margin: 50px auto;
+    border: none;
+    border-left: 5px solid var(--border-color, #2f80ed);
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.dashboard-shell .page-card {
+    max-width: none;
+    margin: 0;
+}
+
+.page-header {
+    background-color: #123c69;
+    color: white;
+    padding: 22px 28px;
+    border-radius: 16px 16px 0 0;
+}
+
+.page-header h1 {
+    font-size: 24px;
+    margin: 0;
+    font-weight: 700;
+}
+
+.page-header p {
+    margin: 6px 0 0;
+    color: #dbeafe;
+}
+
+.table-card {
+    background: white;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.crud-table-card .table thead th {
+    background-color: var(--main-color, #123c69);
+    color: white;
+    border: none;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.email-cell {
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.actions-cell {
+    min-width: 170px;
+}
+
+.badge-groupe {
+    background-color: #e8f1fb;
+    color: #123c69;
+    border: 1px solid #c9dff7;
+    font-weight: 600;
+}
+
+.relation-help {
+    background-color: #eef4fb;
+    border-left: 4px solid #123c69;
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: #334155;
+    font-size: 14px;
+}
+
+/* Forms */
+.form-label {
+    font-weight: 600;
+    color: #123c69;
+}
+
+.help-box {
+    background-color: #eef4fb;
+    border-left: 4px solid #123c69;
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: #334155;
+    font-size: 14px;
+}
+
+.auth-body {
+    background: #eef3f8;
+}
+
+.auth-screen {
+    min-height: 100vh;
+}
+
+/* Buttons */
+.btn-main {
+    background-color: #123c69;
+    color: white;
+    border: none;
+}
+
+.btn-main:hover {
+    background-color: #0b1f3a;
+    color: white;
+}
+
+/* Alerts */
