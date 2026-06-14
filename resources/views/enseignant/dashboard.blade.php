@@ -6,21 +6,23 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    @php
+        $role = auth()->user()->role;
+        $isStudent = $role == 'etudiant';
+
+        $enseignant = \App\Models\Enseignant::with('modules.groupe.etudiants')
+            ->where('user_id', auth()->id())
+            ->first();
+
+        $modules = $enseignant ? $enseignant->modules : collect();
+    @endphp
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
 <body class="dashboard-shell role-enseignant">
 
-@php
-    $enseignant = \App\Models\Enseignant::with('modules.groupe.etudiants')
-        ->where('user_id', auth()->id())
-        ->first();
-
-    $modules = $enseignant ? $enseignant->modules : collect();
-@endphp
-
-{{-- Sidebar --}}
 <div class="sidebar" id="sidebar">
 
     <div class="brand">
@@ -28,14 +30,9 @@
         <span class="text-menu"> Guelmim</span>
     </div>
 
-    <a href="#" class="active">
+    <a href="/enseignant/dashboard" class="active">
         <span>🏠</span>
         <span class="text-menu">Dashboard</span>
-    </a>
-
-    <a href="{{ route('presences.index') }}">
-        <span>✓</span>
-        <span class="text-menu">Présences</span>
     </a>
 
     <a href="{{ route('cours.index') }}">
@@ -43,6 +40,15 @@
         <span class="text-menu">Mes cours</span>
     </a>
 
+    <a href="{{ route('seances.index') }}">
+        <span>📅</span>
+        <span class="text-menu">Séances</span>
+    </a>
+
+    <a href="{{ route('presences.index') }}">
+        <span>✓</span>
+        <span class="text-menu">Présences</span>
+    </a>
 
     <a href="{{ route('evaluations.index') }}">
         <span>📝</span>
@@ -56,10 +62,8 @@
 
 </div>
 
-{{-- Main content --}}
 <div class="content" id="content">
 
-    {{-- Topbar --}}
     <div class="topbar shadow-sm">
 
         <div class="d-flex align-items-center gap-3">
@@ -100,7 +104,7 @@
             </h2>
 
             <p class="text-muted mb-0">
-                Bienvenue {{ auth()->user()->name }} — Vous pouvez gérer les présences, créer les évaluations et ajouter les notes.
+                Bienvenue {{ auth()->user()->name }} — Vous pouvez gérer les séances, les présences, les évaluations, les notes et vos cours.
             </p>
         </div>
 
@@ -111,6 +115,23 @@
         @endif
 
         <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold">Séances</h5>
+                        <p class="text-muted">
+                            Créer et gérer les séances pédagogiques.
+                        </p>
+                        <a href="{{ route('seances.index') }}" class="btn btn-success btn-sm">
+                            Voir
+                        </a>
+                        <a href="{{ route('seances.create') }}" class="btn btn-outline-success btn-sm">
+                            Ajouter
+                        </a>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-md-4">
                 <div class="card dashboard-card h-100">
@@ -163,13 +184,12 @@
                 </div>
             </div>
 
-
             <div class="col-md-4">
                 <div class="card dashboard-card h-100">
                     <div class="card-body p-4">
                         <h5 class="fw-bold">Mes cours</h5>
                         <p class="text-muted">
-                            Publier et gerer mes ressources pedagogiques.
+                            Publier et gérer mes ressources pédagogiques.
                         </p>
                         <a href="{{ route('cours.index') }}" class="btn btn-success btn-sm">
                             Voir
@@ -180,9 +200,9 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
-        {{-- Mes modules et groupes --}}
         <div class="card table-card mt-4">
             <div class="card-body p-4">
 

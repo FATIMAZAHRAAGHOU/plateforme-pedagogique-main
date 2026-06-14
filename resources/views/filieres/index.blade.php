@@ -55,6 +55,12 @@
         <span class="text-menu">Étudiants</span>
     </a>
 
+    <a href="{{ route('cours.index') }}">
+            <span>📚</span>
+            <span class="text-menu">Tous les cours</span>
+    </a>
+
+
 </div>
 
 {{-- Main content --}}

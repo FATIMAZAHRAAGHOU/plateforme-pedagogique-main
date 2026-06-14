@@ -28,20 +28,28 @@
         <span>BTS</span>
         <span class="text-menu"> Guelmim</span>
     </div>
+    
 
     <a href="{{ $dashboardLink }}">
         <span>🏠</span>
         <span class="text-menu">Dashboard</span>
     </a>
 
-    @if($isAdmin)
+    <a href="{{ route('cours.index') }}" class="active">
+        <span>📚</span>
+        <span class="text-menu">
+            {{ $isAdmin ? 'Tous les cours' : 'Mes cours' }}
+        </span>
+    </a>
+    
+    @if(!$isStudent)
         <a href="{{ route('seances.index') }}">
             <span>📅</span>
             <span class="text-menu">Séances</span>
         </a>
     @endif
 
-    <a href="{{ route('presences.index') }}">
+    <a href="{{ route('presences.index') }}" class="active">
         <span>✓</span>
         <span class="text-menu">
             {{ $isStudent ? 'Mes absences' : 'Présences' }}
@@ -55,11 +63,11 @@
         </span>
     </a>
 
-    <a href="{{ route('notes.index') }}" class="active">
+    <a href="{{ route('notes.index') }}">
         <span>📊</span>
         <span class="text-menu">
             {{ $isStudent ? 'Mes notes' : 'Notes' }}
-        </span>
+    </span>
     </a>
 
 </div>

@@ -10,9 +10,18 @@
         $role = auth()->user()->role;
         $isAdmin = $role == 'admin';
         $isStudent = $role == 'etudiant';
-        $dashboardLink = $isStudent ? '/etudiant/dashboard' : ($isAdmin ? '/admin/dashboard' : '/enseignant/dashboard');
-        $buttonClass = $isStudent ? 'btn-info text-white' : ($isAdmin ? 'btn-primary' : 'btn-success');
-        $outlineButtonClass = $isStudent ? 'btn-outline-info' : ($isAdmin ? 'btn-outline-primary' : 'btn-outline-success');
+
+        $dashboardLink = $isStudent
+            ? '/etudiant/dashboard'
+            : ($isAdmin ? '/admin/dashboard' : '/enseignant/dashboard');
+
+        $buttonClass = $isStudent
+            ? 'btn-info text-white'
+            : ($isAdmin ? 'btn-primary' : 'btn-success');
+
+        $outlineButtonClass = $isStudent
+            ? 'btn-outline-info'
+            : ($isAdmin ? 'btn-outline-primary' : 'btn-outline-success');
     @endphp
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -39,18 +48,30 @@
             <span class="text-menu">Modules</span>
         </a>
     @endif
-
     <a href="{{ route('cours.index') }}" class="active">
         <span>📚</span>
         <span class="text-menu">
             {{ $isAdmin ? 'Tous les cours' : 'Mes cours' }}
         </span>
     </a>
+    @if(!$isStudent)
+        <a href="{{ route('seances.index') }}">
+            <span>📅</span>
+            <span class="text-menu">Séances</span>
+        </a>
+    @endif
+
+    <a href="{{ route('presences.index') }}">
+        <span>✓</span>
+        <span class="text-menu">
+            {{ $isStudent ? 'Mes absences' : 'Présences' }}
+        </span>
+    </a>
 
     <a href="{{ route('evaluations.index') }}">
         <span>📝</span>
         <span class="text-menu">
-            {{ $isStudent ? 'Mes evaluations' : 'Evaluations' }}
+            {{ $isStudent ? 'Mes évaluations' : 'Évaluations' }}
         </span>
     </a>
 
@@ -77,7 +98,7 @@
                     {{ $isAdmin ? 'Tous les cours' : 'Mes cours' }}
                 </h5>
                 <small class="text-muted">
-                    {{ $isStudent ? 'Consultation des ressources de mon groupe' : 'Gestion des ressources pedagogiques' }}
+                    {{ $isStudent ? 'Consultation des ressources de mon groupe' : 'Gestion des ressources pédagogiques' }}
                 </small>
             </div>
         </div>
@@ -90,7 +111,7 @@
             <form action="{{ route('logout') }}" method="POST" class="mb-0">
                 @csrf
                 <button class="btn {{ $buttonClass }} btn-sm">
-                    Deconnexion
+                    Déconnexion
                 </button>
             </form>
         </div>
@@ -108,12 +129,12 @@
                     </h2>
 
                     <p class="text-muted mb-0">
-                        {{ $isStudent ? 'Consulter et telecharger les supports de mon groupe.' : 'Publier, modifier et suivre les supports pedagogiques.' }}
+                        {{ $isStudent ? 'Consulter et télécharger les supports de mon groupe.' : 'Publier, modifier et suivre les supports pédagogiques.' }}
                     </p>
                 </div>
 
                 @if(!$isStudent)
-                    <a href="{{ route('cours.create') }}" class="btn {{ $isAdmin ? 'btn-primary' : 'btn-success' }}">
+                    <a href="{{ route('cours.create') }}" class="btn {{ $buttonClass }}">
                         Ajouter un cours
                     </a>
                 @endif
@@ -122,7 +143,7 @@
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert {{ $isAdmin ? 'alert-primary' : ($isStudent ? 'alert-info' : 'alert-success') }}">
                 {{ session('success') }}
             </div>
         @endif
@@ -157,9 +178,11 @@
 
                                     <td>
                                         @if($item->groupe)
-                                            <span class="badge badge-groupe">{{ $item->groupe->nom }}</span>
+                                            <span class="badge badge-groupe">
+                                                {{ $item->groupe->nom }}
+                                            </span>
                                         @else
-                                            <span class="text-muted">Non affecte</span>
+                                            <span class="text-muted">Non affecté</span>
                                         @endif
                                     </td>
 
@@ -167,14 +190,16 @@
                                         @if($item->enseignant)
                                             {{ $item->enseignant->nom }} {{ $item->enseignant->prenom }}
                                         @else
-                                            <span class="text-muted">Non affecte</span>
+                                            <span class="text-muted">Non affecté</span>
                                         @endif
                                     </td>
 
                                     <td>
                                         @if($item->fichier)
-                                            <a href="{{ Storage::url($item->fichier) }}" class="btn btn-sm {{ $isStudent ? 'btn-info text-white' : 'btn-outline-primary' }}" target="_blank">
-                                                Telecharger
+                                            <a href="{{ Storage::url($item->fichier) }}"
+                                               class="btn btn-sm {{ $isStudent ? 'btn-info text-white' : ($isAdmin ? 'btn-outline-primary' : 'btn-outline-success') }}"
+                                               target="_blank">
+                                                Télécharger
                                             </a>
                                         @else
                                             <span class="text-muted">Aucun fichier</span>
@@ -205,7 +230,7 @@
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center text-muted py-4">
-                                        Aucun cours trouve.
+                                        Aucun cours trouvé.
                                     </td>
                                 </tr>
                             @endforelse
@@ -231,8 +256,8 @@
 
     function confirmDelete(button) {
         Swal.fire({
-            title: 'Etes-vous sur ?',
-            text: 'Ce cours sera supprime definitivement.',
+            title: 'Êtes-vous sûr ?',
+            text: 'Ce cours sera supprimé définitivement.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Oui, supprimer',

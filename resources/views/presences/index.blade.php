@@ -10,9 +10,18 @@
         $role = auth()->user()->role;
         $isAdmin = $role == 'admin';
         $isStudent = $role == 'etudiant';
-        $dashboardLink = $isStudent ? '/etudiant/dashboard' : ($isAdmin ? '/admin/dashboard' : '/enseignant/dashboard');
-        $buttonClass = $isStudent ? 'btn-info text-white' : ($isAdmin ? 'btn-primary' : 'btn-success');
-        $outlineButtonClass = $isStudent ? 'btn-outline-info' : ($isAdmin ? 'btn-outline-primary' : 'btn-outline-success');
+
+        $dashboardLink = $isStudent
+            ? '/etudiant/dashboard'
+            : ($isAdmin ? '/admin/dashboard' : '/enseignant/dashboard');
+
+        $buttonClass = $isStudent
+            ? 'btn-info text-white'
+            : ($isAdmin ? 'btn-primary' : 'btn-success');
+
+        $outlineButtonClass = $isStudent
+            ? 'btn-outline-info'
+            : ($isAdmin ? 'btn-outline-primary' : 'btn-outline-success');
     @endphp
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +43,14 @@
         <span class="text-menu">Dashboard</span>
     </a>
 
-    @if($isAdmin)
+    <a href="{{ route('cours.index') }}" class="active">
+        <span>📚</span>
+        <span class="text-menu">
+            {{ $isAdmin ? 'Tous les cours' : 'Mes cours' }}
+        </span>
+    </a>
+
+    @if(!$isStudent)
         <a href="{{ route('seances.index') }}">
             <span>📅</span>
             <span class="text-menu">Séances</span>
@@ -67,7 +83,6 @@
 {{-- Main content --}}
 <div class="content" id="content">
 
-    {{-- Topbar --}}
     <div class="topbar shadow-sm">
 
         <div class="d-flex align-items-center gap-3">
@@ -116,7 +131,7 @@
                 </div>
 
                 @if(!$isStudent)
-                    <a href="{{ route('presences.create') }}" class="btn btn-success">
+                    <a href="{{ route('presences.create') }}" class="btn {{ $buttonClass }}">
                         Ajouter une présence
                     </a>
                 @endif
@@ -125,7 +140,7 @@
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert {{ $isAdmin ? 'alert-primary' : ($isStudent ? 'alert-info' : 'alert-success') }}">
                 {{ session('success') }}
             </div>
         @endif

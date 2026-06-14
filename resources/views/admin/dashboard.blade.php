@@ -31,6 +31,16 @@
             <span class="text-menu">Comptes login</span>
         </a>
 
+        <a href="{{ route('enseignants.index') }}">
+            <span>👨‍🏫</span>
+            <span class="text-menu">Enseignants</span>
+        </a>
+
+        <a href="{{ route('etudiants.index') }}">
+            <span>🎓</span>
+            <span class="text-menu">Étudiants</span>
+        </a>
+
         <a href="{{ route('filieres.index') }}">
             <span>📚</span>
             <span class="text-menu">Filières</span>
@@ -52,15 +62,7 @@
         </a>
 
 
-        <a href="{{ route('enseignants.index') }}">
-            <span>👨‍🏫</span>
-            <span class="text-menu">Enseignants</span>
-        </a>
-
-        <a href="{{ route('etudiants.index') }}">
-            <span>🎓</span>
-            <span class="text-menu">Étudiants</span>
-        </a>
+        
 
     </div>
 

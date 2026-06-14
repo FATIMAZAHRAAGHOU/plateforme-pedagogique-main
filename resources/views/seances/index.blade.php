@@ -6,11 +6,29 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    @php
+        $role = auth()->user()->role;
+        $isAdmin = $role == 'admin';
+        $isStudent = $role == 'etudiant';
+
+        $dashboardLink = $isStudent
+            ? '/etudiant/dashboard'
+            : ($isAdmin ? '/admin/dashboard' : '/enseignant/dashboard');
+
+        $buttonClass = $isStudent
+            ? 'btn-info text-white'
+            : ($isAdmin ? 'btn-primary' : 'btn-success');
+
+        $outlineButtonClass = $isStudent
+            ? 'btn-outline-info'
+            : ($isAdmin ? 'btn-outline-primary' : 'btn-outline-success');
+    @endphp
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
-<body class="dashboard-shell role-enseignant">
+<body class="dashboard-shell role-{{ $role }} role-dynamic-index">
 
 {{-- Sidebar --}}
 <div class="sidebar" id="sidebar">
@@ -20,29 +38,44 @@
         <span class="text-menu"> Guelmim</span>
     </div>
 
-    <a href="/enseignant/dashboard">
+    <a href="{{ $dashboardLink }}">
         <span>🏠</span>
         <span class="text-menu">Dashboard</span>
     </a>
 
-    <a href="{{ route('seances.index') }}" class="active">
-        <span>📅</span>
-        <span class="text-menu">Séances</span>
+    <a href="{{ route('cours.index') }}" class="active">
+        <span>📚</span>
+        <span class="text-menu">
+            {{ $isAdmin ? 'Tous les cours' : 'Mes cours' }}
+        </span>
     </a>
+
+    @if(!$isStudent)
+        <a href="{{ route('seances.index') }}" class="active">
+            <span>📅</span>
+            <span class="text-menu">Séances</span>
+        </a>
+    @endif
 
     <a href="{{ route('presences.index') }}">
         <span>✓</span>
-        <span class="text-menu">Présences</span>
+        <span class="text-menu">
+            {{ $isStudent ? 'Mes absences' : 'Présences' }}
+        </span>
     </a>
 
     <a href="{{ route('evaluations.index') }}">
         <span>📝</span>
-        <span class="text-menu">Évaluations</span>
+        <span class="text-menu">
+            {{ $isStudent ? 'Mes évaluations' : 'Évaluations' }}
+        </span>
     </a>
 
     <a href="{{ route('notes.index') }}">
         <span>📊</span>
-        <span class="text-menu">Notes</span>
+        <span class="text-menu">
+            {{ $isStudent ? 'Mes notes' : 'Notes' }}
+        </span>
     </a>
 
 </div>
@@ -54,7 +87,7 @@
     <div class="topbar shadow-sm">
 
         <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-outline-success btn-sm" onclick="toggleSidebar()">
+            <button class="btn {{ $outlineButtonClass }} btn-sm" onclick="toggleSidebar()">
                 ☰
             </button>
 
@@ -75,7 +108,7 @@
 
             <form action="{{ route('logout') }}" method="POST" class="mb-0">
                 @csrf
-                <button class="btn btn-success btn-sm">
+                <button class="btn {{ $buttonClass }} btn-sm">
                     Déconnexion
                 </button>
             </form>
@@ -98,15 +131,17 @@
                     </p>
                 </div>
 
-                <a href="{{ route('seances.create') }}" class="btn btn-success">
-                    Ajouter une séance
-                </a>
+                @if(!$isStudent)
+                    <a href="{{ route('seances.create') }}" class="btn {{ $buttonClass }}">
+                        Ajouter une séance
+                    </a>
+                @endif
 
             </div>
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert {{ $isAdmin ? 'alert-primary' : 'alert-success' }}">
                 {{ session('success') }}
             </div>
         @endif
@@ -123,7 +158,10 @@
                             <th>Heure début</th>
                             <th>Heure fin</th>
                             <th>Module</th>
-                            <th width="220">Actions</th>
+
+                            @if(!$isStudent)
+                                <th width="220">Actions</th>
+                            @endif
                         </tr>
                     </thead>
 
@@ -131,31 +169,28 @@
                         @foreach($seances as $seance)
                             <tr>
                                 <td>{{ $seance->id }}</td>
-
                                 <td>{{ $seance->titre }}</td>
-
                                 <td>{{ $seance->date }}</td>
-
                                 <td>{{ $seance->heure_debut }}</td>
-
                                 <td>{{ $seance->heure_fin }}</td>
-
                                 <td>{{ $seance->module->nom ?? '' }}</td>
 
-                                <td>
-                                    <a href="{{ route('seances.edit', $seance->id) }}" class="btn btn-sm btn-warning">
-                                        Modifier
-                                    </a>
+                                @if(!$isStudent)
+                                    <td>
+                                        <a href="{{ route('seances.edit', $seance->id) }}" class="btn btn-sm btn-warning">
+                                            Modifier
+                                        </a>
 
-                                    <form action="{{ route('seances.destroy', $seance->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
+                                        <form action="{{ route('seances.destroy', $seance->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
 
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
-                                            Supprimer
-                                        </button>
-                                    </form>
-                                </td>
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+                                                Supprimer
+                                            </button>
+                                        </form>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

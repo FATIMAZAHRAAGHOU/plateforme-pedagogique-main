@@ -31,6 +31,11 @@
         <div class="mb-3">
             <label class="form-label">Date</label>
             <input type="date" name="date" class="form-control" value="{{ old('date', $seance->date) }}">
+             @if ($errors->has('date'))
+            <div class="text-danger mb-3" >
+                {{$errors->first('date')}}
+            </div>
+             @endif
         </div>
 
         <div class="mb-3">
@@ -55,6 +60,11 @@
                 @endforeach
             </select>
         </div>
+ @if ($errors->has('heure_fin'))
+        <div class="text-danger mb-3" >
+            {{$errors->first('heure_fin')}}
+        </div>
+    @endif
 
         <button type="submit" class="btn btn-primary">Modifier</button>
 

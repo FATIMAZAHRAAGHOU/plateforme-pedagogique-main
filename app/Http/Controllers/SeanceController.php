@@ -10,7 +10,7 @@ class SeanceController extends Controller
 {
     private function ensureAdmin(): void
     {
-        if (auth()->user()->role != 'admin') {
+        if (!in_array(auth()->user()->role ,['admin' , 'enseignant'])) {
             abort(403);
         }
     }
@@ -39,9 +39,9 @@ class SeanceController extends Controller
 
         $request->validate([
             'titre' => 'required|string|max:255',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:today',
             'heure_debut' => 'required',
-            'heure_fin' => 'required',
+            'heure_fin' => 'required|after:heure_debut',
             'module_id' => 'required|exists:modules,id',
         ]);
 
@@ -66,9 +66,9 @@ class SeanceController extends Controller
 
         $request->validate([
             'titre' => 'required|string|max:255',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:today',
             'heure_debut' => 'required',
-            'heure_fin' => 'required',
+            'heure_fin' => 'required|after:heure_debut',
             'module_id' => 'required|exists:modules,id',
         ]);
 
