@@ -8,7 +8,7 @@
 
             <div class="col-md-7">
                 <h1 class="display-5">
-                    test test 
+                    Plateforme de Gestion de Formation
                 </h1>
 
                 <p class="lead mt-4">
